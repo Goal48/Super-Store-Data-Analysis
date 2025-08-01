@@ -1,6 +1,6 @@
 # Super Store Data Analysis
 🔍 Project Overview
-This project demonstrates a comprehensive data analytics workflow using an Amazon-like sales dataset, covering every step from data cleaning to interactive dashboarding. It showcases skills in Excel, Python (Pandas, Seaborn, Matplotlib), SQL, and Power BI, ideal for a data analyst or business intelligence role.
+This project demonstrates a comprehensive data analytics workflow using sales dataset, covering every step from data cleaning to interactive dashboarding. It showcases skills in Excel, Python (Pandas, Seaborn, Matplotlib), SQL, and Power BI, ideal for a data analyst or business intelligence role.
 
 📁 Table of Contents
 Data Cleaning in Excel
