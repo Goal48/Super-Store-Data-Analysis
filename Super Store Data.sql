@@ -1,0 +1,69 @@
+
+
+
+
+
+
+SELECT cast((SELECT COUNT([PRODUCT ID]) as CID FROM MD WHERE REGION = 'WEST') as decimal(7,2))/
+(SELECT COUNT([PRODUCT ID]) as CPID FROM MD WHERE REGION = 'EAST') AS RT
+
+
+
+
+
+
+
+-- REPEATED CUSTOMERS (CUSTOMER ID HAVING COUNT OF ORDER ID MORE THAN 1)
+create view repeated_customers as
+(select [customer id], count(distinct([order id])) as cc from md group by [Customer ID] having count(distinct([order id]))>1) 
+
+-- TOTAL CUSTOMER ID
+select count([customer id]) from Customers
+
+-- RETENTION RATE
+select (((select count(*) from repeated_customers)*1.0)/(select count([customer id]) from Customers))*100 AS RETENTION_RATE
+
+
+
+
+
+
+   
+
+SELECT TOP(10) * FROM 
+(SELECT [CUSTOMER NAME], STATE, SUM(SALES) AS TOTAL_SALES FROM MD GROUP BY STATE,[Customer Name] ) 
+AS CUSTOMER_TABLE ORDER BY TOTAL_SALES DESC
+
+
+
+
+
+
+
+-- TOTAL CUSTOMER IDS
+select count(distinct([customer id])) from md
+
+-- LAST ORDER DATE
+SELECT MAX([Order Date]) FROM MD
+
+-- 2 MONTHS PRIOR LAST DATE
+SELECT DATEADD(MONTH,-2,(SELECT MAX([Order Date]) FROM MD))
+
+-- NUMBER OF CUSTOMERS WHO HAVE PLACED ORDER IN THE LAST TWO MONTH
+SELECT COUNT(*) AS CC FROM 
+(SELECT distinct([Customer ID]) AS CID FROM MD WHERE [ORDER DATE] BETWEEN 
+(SELECT DATEADD(MONTH,-2,(SELECT MAX([Order Date]) FROM MD))) AND (SELECT MAX([Order Date]) FROM MD) GROUP BY [CUSTOMER ID]) AS CID
+
+-- FINAL ANSWER - NUMBER OF CUSTOMERS WHO HAVE NOT PLACED ORDER IN THE LAST TWO MONTH
+-- FORMULA  = TOTAL CUSTOMER ID - NUMBER OF CUSTOMERS WHO PLACED ORDER IN THE LAST 2 MONTHS
+select (select count(distinct([customer id])) from md) - 
+(SELECT COUNT(*) AS CC FROM (SELECT distinct([Customer ID]) AS CN FROM MD WHERE [ORDER DATE] BETWEEN 
+(SELECT DATEADD(MONTH,-2,(SELECT MAX([Order Date]) FROM MD))) AND (SELECT MAX([Order Date]) FROM MD) GROUP BY [Customer ID]) AS CN) AS NO_OF_CUSTOMERS
+
+
+
+
+
+
+SELECT [CUSTOMER ID], [CUSTOMER NAME], CITY FROM CUSTOMERS WHERE CITY IN  
+(SELECT CITY FROM CUSTOMERS GROUP BY CITY HAVING COUNT(DISTINCT([CUSTOMER ID])) >1)
